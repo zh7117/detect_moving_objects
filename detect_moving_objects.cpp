@@ -49,14 +49,14 @@ static struct object* preobjects=new object();
 static struct object* currobjects=new object();
 static CvFont font1, font2;
 static char buf[10];
-void FillInternalContours(IplImage *pBinary, double dAreaThre)//È¥³ıÇ°¾°ÖĞÃæ»ıĞ¡ÓÚdAreaThreµÄÁ¬Í¨Óò£¬Ìî²¹´óÓÚdAreaThreµÄÁ¬Í¨ÓòµÄÖĞ¿ÕÏÖÏó
+void FillInternalContours(IplImage *pBinary, double dAreaThre)//å»é™¤å‰æ™¯ä¸­é¢ç§¯å°äºdAreaThreçš„è¿é€šåŸŸï¼Œå¡«è¡¥å¤§äºdAreaThreçš„è¿é€šåŸŸçš„ä¸­ç©ºç°è±¡
 {
 	CvSeq *pContour = NULL;
 	CvMemStorage *pStorage = NULL;  
 	if (pBinary)
 	{   
 		pStorage = cvCreateMemStorage(0);
-		//¼ÆËãÇ°¾°ÖĞËùÓĞÁ¬Í¨ÓòµÄÍâ²ãÂÖÀª
+		//è®¡ç®—å‰æ™¯ä¸­æ‰€æœ‰è¿é€šåŸŸçš„å¤–å±‚è½®å»“
 		cvFindContours(pBinary, pStorage, &pContour, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);   	
 		//std::cout << CV_FILLED << "\n";   
 		int wai = 0;
@@ -64,11 +64,11 @@ void FillInternalContours(IplImage *pBinary, double dAreaThre)//È¥³ıÇ°¾°ÖĞÃæ»ıĞ¡
 		{
 			wai++;
 			if (fabs(cvContourArea(pContour, CV_WHOLE_SEQ)) < dAreaThre) {
-				//Ìî³äÎªºÚÉ«
+				//å¡«å……ä¸ºé»‘è‰²
 				cvDrawContours(pBinary, pContour, CV_RGB(0, 0, 0), CV_RGB(0, 0, 0), 2, CV_FILLED, 8, cvPoint(0, 0));
 			}
 			else {
-				//Ìî³äÎª°×É«
+				//å¡«å……ä¸ºç™½è‰²
 				cvDrawContours(pBinary, pContour, CV_RGB(255, 255, 255), CV_RGB(255, 255, 255), 2, CV_FILLED, 8, cvPoint(0, 0));
 		}
 		}
@@ -105,7 +105,7 @@ void FillInternalContours(IplImage *pBinary, double dAreaThre)//È¥³ıÇ°¾°ÖĞÃæ»ıĞ¡
 	float avgValue = 0;
 	for (int i = 0; i < 256; i++)
 	{
-		avgValue += i * histogram[i];  //Õû·ùÍ¼ÏñµÄÆ½¾ù»Ò¶È      
+		avgValue += i * histogram[i];  //æ•´å¹…å›¾åƒçš„å¹³å‡ç°åº¦      
 	}
 
 	int threshold;
@@ -113,8 +113,8 @@ void FillInternalContours(IplImage *pBinary, double dAreaThre)//È¥³ıÇ°¾°ÖĞÃæ»ıĞ¡
 	float w = 0, u = 0;
 	for (int i = 0; i < 256; i++)
 	{
-		w += histogram[i];  //¼ÙÉèµ±Ç°»Ò¶ÈiÎªãĞÖµ, 0~i »Ò¶ÈµÄÏñËØ(¼ÙÉèÏñËØÖµÔÚ´Ë·¶Î§µÄÏñËØ½Ğ×öÇ°¾°ÏñËØ) ËùÕ¼Õû·ùÍ¼ÏñµÄ±ÈÀı      
-		u += i * histogram[i];  // »Ò¶Èi Ö®Ç°µÄÏñËØ(0~i)µÄÆ½¾ù»Ò¶ÈÖµ£º Ç°¾°ÏñËØµÄÆ½¾ù»Ò¶ÈÖµ      
+		w += histogram[i];  //å‡è®¾å½“å‰ç°åº¦iä¸ºé˜ˆå€¼, 0~i ç°åº¦çš„åƒç´ (å‡è®¾åƒç´ å€¼åœ¨æ­¤èŒƒå›´çš„åƒç´ å«åšå‰æ™¯åƒç´ ) æ‰€å æ•´å¹…å›¾åƒçš„æ¯”ä¾‹      
+		u += i * histogram[i];  // ç°åº¦i ä¹‹å‰çš„åƒç´ (0~i)çš„å¹³å‡ç°åº¦å€¼ï¼š å‰æ™¯åƒç´ çš„å¹³å‡ç°åº¦å€¼      
 
 		float t = avgValue * w - u;
 		float variance = t * t / (w * (1 - w));
